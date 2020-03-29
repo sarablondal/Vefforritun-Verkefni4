@@ -85,8 +85,6 @@ describe('Endpoint tests', () => {
                 })
             })
         });
-});
-
 
      describe("endpoint #3 test", ()=> {
             it('Post an Event', function(done) {
@@ -111,8 +109,16 @@ describe('Endpoint tests', () => {
             })
         });
 
-});
+    describe("Delete tests", ()=> {
+        describe("endpoint #4 test", () => {
+            it('Delete a specific Booking for a specific Event with correct credentials', (done) => {
+                chai.request('http://localhost:3000/api/v1').delete('/events/' + eventId + "/bookings/" + bookingId).auth("admin", "secret").end((err, res) => {
+                    chai.expect(res).to.have.status(200);
+                    done();
+                })
+            })
 
+        });
 
 describe("GET & POST endpoint tests", () => {
     describe("endpoint #5 test", ()=> {
@@ -146,4 +152,30 @@ describe("endpoint #6 test", ()=> {
             })
         })
     });
+
+
+    describe("endpoint #7 test", ()=> {
+        it('Post a booking for a specific Event', function(done){
+            chai.request('http://localhost:3000/api/v1').post('/events/'+ eventId + "/bookings").type('JSON').send({
+                "firstName": "Pall",
+                "lastName": "Bjarki",
+                "tel": 1234567,
+                "email": "blablabla@gmail.com",
+                "spots": 2
+            }).end((err, res) => {
+                chai.expect(res).to.have.status(201);
+                chai.expect(res).to.be.json;
+                chai.expect(Object.keys(res.body).length).to.eql(6);
+                chai.expect(res.body).to.be.a('object');
+                chai.expect(res.body).to.have.property('firstName').eql('Pall');
+                chai.expect(res.body).to.have.property('lastName').eql('Bjarki');
+                chai.expect(res.body).to.have.property('_id');
+                chai.expect(res.body).to.have.property('tel').eql('1234567');
+                chai.expect(res.body).to.have.property('email').eql('blablabla@gmail.com');
+                chai.expect(res.body).to.have.property('spots').eql(2);
+                done();
+                })
+            })
+        });
+
 });
