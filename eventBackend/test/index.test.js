@@ -117,13 +117,33 @@ describe('Endpoint tests', () => {
 describe("GET & POST endpoint tests", () => {
     describe("endpoint #5 test", ()=> {
         it('Get All Bookings', (done) => {
-            chai.request('http://localhost:3000/api/v1/').get('/events/:eventId/bookings').end((err, res) => {
+            chai.request('http://localhost:3000/api/v1/').get('/events/' + eventId + '/bookings').end((err, res) => {
                 chai.expect(res).to.have.status(200);
                 chai.expect(res).to.be.json;
                 chai.expect(res.body).to.be.an('array');
                 chai.expect(res.body.length).to.eql(1);
-                done()
+                done();
             })
         })
-    })
+    });
+});
+
+
+describe("endpoint #6 test", ()=> {
+    it('Get Specific Booking', (done) => {
+        chai.request('http://localhost:3000/api/v1/events/' + eventId ).get('/bookings/' + bookingId).end((err, res) => {
+            chai.expect(res).to.have.status(200);
+            chai.expect(res).to.be.json;
+            chai.expect(Object.keys(res.body).length).to.eql(6);
+            chai.expect(res.body).to.be.a('object');
+            chai.expect(res.body).to.have.property('_id').eql(bookingId.toString());
+            chai.expect(res.body).to.have.property('firstName');
+            chai.expect(res.body).to.have.property('lastName');
+            chai.expect(res.body).to.have.property('spots').egl(res.capacity);
+            chai.expect(res.body).to.have.property('email');
+            chai.expect(res.body).to.have.property('tel');
+            done();
+            })
+        })
+    });
 });
