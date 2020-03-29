@@ -7,12 +7,14 @@ var utility = require('./utility/objectIdChecker');
 
 //Import a body parser module to be able to access the request body as json
 const bodyParser = require('body-parser');
+const basicAuth = require('express-basic-auth');
 
 const cors = require('cors');
 
 const apiPath = '/api/';
 const version = 'v1';
 var mongoURI = 'mongodb://localhost:27017/eventbackend';
+
 var port = process.env.PORT || 3000;
 
 // Connect to MongoDB
@@ -33,6 +35,13 @@ app.use(bodyParser.json());
 
 //Tell express to use cors -- enables CORS for this backend
 app.use(cors());
+
+// Enable Auth for all of the following endpoints:
+app.use(basicAuth({
+//hardcoded stuffs
+
+    users: sha256( {'admin':'secret'} ) 
+}));
 
 //Event endpoints
 
@@ -212,6 +221,7 @@ app.delete(apiPath + version + '/events/:eventId/bookings/:bookingId', (req, res
 app.route('*', (req, res) => {
     res.status(405).send('Operation not supported.');
 });
+
 
 // Error handler
 var env = app.get('env');
