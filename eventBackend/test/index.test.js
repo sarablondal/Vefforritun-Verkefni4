@@ -86,3 +86,18 @@ describe('Endpoint tests', () => {
             })
         });
 });
+
+
+describe("GET & POST endpoint tests", () => {
+    describe("endpoint #5 test", ()=> {
+        it('Get All Bookings', (done) => {
+            chai.request('http://localhost:3000/api/v1/').get('/events/:eventId/bookings').end((err, res) => {
+                chai.expect(res).to.have.status(200);
+                chai.expect(res).to.be.json;
+                chai.expect(res.body).to.be.an('array');
+                chai.expect(res.body.length).to.eql(1);
+                done()
+            })
+        })
+    })
+});
