@@ -38,9 +38,31 @@ app.use(cors());
 
 // Enable Auth for all of the following endpoints:
 app.use(basicAuth({
-//hardcoded stuffs
+    app.use((req, res, next) => {
 
-    users: sha256( {'admin':'secret'} ) 
+        // -----------------------------------------------------------------------
+        // authentication middleware
+      
+        const auth = {
+    users: sha256( {'admin':'secret'} ) } // change this
+      
+        // parse login and password from headers
+        const b64auth = (req.headers.authorization || '').split(' ')[1] || ''
+        const [login, password] = Buffer.from(b64auth, 'base64').toString().split(':')
+      
+        // Verify login and password are set and correct
+        if (login && password && login === auth.login && password === auth.password) {
+          // Access granted...
+          return next()
+        }
+      
+        // Access denied...
+        res.set('WWW-Authenticate', 'Basic realm="401"') // change this
+        res.status(401).send('Authentication required.') // custom message
+      
+        // -----------------------------------------------------------------------
+      
+      })
 }));
 
 //Event endpoints
