@@ -88,6 +88,32 @@ describe('Endpoint tests', () => {
 });
 
 
+     describe("endpoint #3 test", ()=> {
+            it('Post an Event', function(done) {
+                chai.request('http://localhost:3000/api/v1').post('/events/').type('JSON').send({
+                    "name": "Mababa",
+                    "capacity": 1000,
+                    "startDate": "2020-03-14T02:02:02.000Z",
+                    "endDate": "2020-03-25T08:05:03.000Z",
+                    "_id": "5e78b06eccacf926ec9b06a2"
+                }).end((err, res) => {
+                    chai.expect(res).to.have.status(201);
+                    chai.expect(res).to.be.json;
+                    chai.expect(Object.keys(res.body).length).to.eql(7);
+                    chai.expect(res.body).to.be.a('object');
+                    chai.expect(res.body).to.have.property('name').eql('Mababa');
+                    chai.expect(res.body).to.have.property('capacity').eql(1000);
+                    chai.expect(res.body).to.have.property('_id');
+                    chai.expect(res.body).to.have.property('startDate');
+                    chai.expect(res.body).to.have.property('endDate');
+                    done();
+                })
+            })
+        });
+
+});
+
+
 describe("GET & POST endpoint tests", () => {
     describe("endpoint #5 test", ()=> {
         it('Get All Bookings', (done) => {
