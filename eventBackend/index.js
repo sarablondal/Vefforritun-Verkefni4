@@ -13,8 +13,9 @@ const cors = require('cors');
 
 const apiPath = '/api/';
 const version = 'v1';
-var mongoURI = 'mongodb://localhost:27017/eventbackend';
 
+//var mongoURI = 'mongodb://localhost:27017/eventbackend';
+var mongoURI = 'mongodb+srv://admin:<password>@cluster0-d7w3s.mongodb.net/test?retryWrites=true&w=majority'
 var port = process.env.PORT || 3000;
 
 // Connect to MongoDB
