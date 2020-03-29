@@ -35,18 +35,19 @@ app.use(bodyParser.json());
 app.use(cors());
 
 //Event endpoints
+
+// Get all events
 app.get(apiPath + version + '/events', (req, res) => {
     Event.find({ }, '-__v -description -location', function (err, events) {
         if (err) { return next(err); }
         res.status(200).json(events);
     });
 });
-
+// Get single event by id
 app.get(apiPath + version + '/events/:eventId', (req, res) => {
     if (!utility.isValidObjectID(req.params.eventId)) {
         return res.status(404).json({ "error": "Event not found!" });
     }
-
     Event.findById(req.params.eventId, '-__v', function (err, event) {
         if (err) { return next(err); }
         if (event == null) {
@@ -55,6 +56,8 @@ app.get(apiPath + version + '/events/:eventId', (req, res) => {
 
         var eventObj = event._doc;
         eventObj.bookings = [];
+
+// Find booking for event
         Booking.find({ eventId: req.params.eventId }, '_id', (err, bookings) => {
             if (err) { return res.status(500).json({ "message": "Internal server error on getting bookings to an event." }); }
 
@@ -67,6 +70,7 @@ app.get(apiPath + version + '/events/:eventId', (req, res) => {
     });
 });
 
+// Make a new event
 app.post(apiPath + version + '/events', (req, res) => {
     var event = new Event(req.body);
     event.save(function (err) {
@@ -78,6 +82,7 @@ app.post(apiPath + version + '/events', (req, res) => {
     });
 });
 
+// Delete an event with id
 app.delete(apiPath + version + '/events/:eventId', (req, res) => {
     if (!utility.isValidObjectID(req.params.eventId)) {
         return res.status(404).json({ "error": "Event not found!" });
@@ -102,6 +107,7 @@ app.delete(apiPath + version + '/events/:eventId', (req, res) => {
 });
 
 //Bookings endpoints
+// Get all bookings
 app.get(apiPath + version + '/events/:eventId/bookings', (req, res) => {
     if (!utility.isValidObjectID(req.params.eventId)) {
         return res.status(404).json({"message": "Event not found!"});
@@ -113,6 +119,7 @@ app.get(apiPath + version + '/events/:eventId/bookings', (req, res) => {
     });
 });
 
+// Get booking by ID
 app.get(apiPath + version + '/events/:eventId/bookings/:bookingId', (req, res) => {
     if (!utility.isValidObjectID(req.params.eventId)) {
         return res.status(404).json({"message": "Event not found!"});
@@ -132,6 +139,7 @@ app.get(apiPath + version + '/events/:eventId/bookings/:bookingId', (req, res) =
     });
 });
 
+// Create a new booking
 app.post(apiPath + version + '/events/:eventId/bookings', (req, res) => {
     if (!utility.isValidObjectID(req.params.eventId)) {
         return res.status(404).json({"message": "Event not found!"});
@@ -180,6 +188,7 @@ app.post(apiPath + version + '/events/:eventId/bookings', (req, res) => {
     });
 });
 
+//Delete a booking by bookingID
 app.delete(apiPath + version + '/events/:eventId/bookings/:bookingId', (req, res) => {
     if (!utility.isValidObjectID(req.params.eventId)) {
         return res.status(404).json({"message": "Event not found!"});
