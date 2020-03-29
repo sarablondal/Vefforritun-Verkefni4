@@ -37,14 +37,13 @@ app.use(bodyParser.json());
 app.use(cors());
 
 // Enable Auth for all of the following endpoints:
-app.use(basicAuth({
-    app.use((req, res, next) => {
+app.use(basicAuth({app.use((req, res, next) => {
 
         // -----------------------------------------------------------------------
         // authentication middleware
       
         const auth = {
-    users: sha256( {'admin':'secret'} ) } // change this
+        users: sha256( {'admin':'secret'} ) }// change this
       
         // parse login and password from headers
         const b64auth = (req.headers.authorization || '').split(' ')[1] || ''
@@ -62,8 +61,8 @@ app.use(basicAuth({
       
         // -----------------------------------------------------------------------
       
-      })
-}));
+      
+});
 
 //Event endpoints
 
