@@ -160,7 +160,7 @@ describe('Endpoint tests', () => {
 
     describe("endpoint #8 test", ()=> {
         it("Delete a specific booking", function(done){
-            chai.request('http://localhost:3000/api/v1').delete('/events/' + eventId + "/bookings/" + bookingId).auth("notadmin", "notsecret").end((err, res) => {
+            chai.request('http://localhost:3000/api/v1').delete('/events/' + eventId + "/bookings/" + bookingId).auth("admin", "secret").end((err, res) => {
             chai.expect(res).to.have.status(401);
             done();
                 
