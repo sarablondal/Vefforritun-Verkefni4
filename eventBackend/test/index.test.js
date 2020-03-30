@@ -59,7 +59,7 @@ describe('Endpoint tests', () => {
                     chai.expect(res).to.be.json;
                     chai.expect(res.body).to.be.an('array');
                     chai.expect(res.body.length).to.eql(1);
-                    done()
+                    done();
                 })
             })
         })
@@ -81,7 +81,7 @@ describe('Endpoint tests', () => {
                 chai.expect(res.body).to.have.property('endDate');
                 chai.expect(res.body).to.have.property('bookings');
                 chai.expect(res.body.bookings[0]).eql(bookingId.toString());
-                done()
+                done();
                 })
             })
         });
@@ -109,7 +109,7 @@ describe('Endpoint tests', () => {
             })
         });
 
-    describe("Delete tests", ()=> {
+    describe("Delete test #1", ()=> {
         describe("endpoint #4 test", () => {
             it('Delete a specific Booking for a specific Event with correct credentials', (done) => {
                 chai.request('http://localhost:3000/api/v1').delete('/events/' + eventId + "/bookings/" + bookingId).auth("admin", "secret").end((err, res) => {
@@ -120,35 +120,15 @@ describe('Endpoint tests', () => {
 
         });
 
-describe("GET & POST endpoint tests", () => {
-    describe("endpoint #5 test", ()=> {
-        it('Get All Bookings', (done) => {
-            chai.request('http://localhost:3000/api/v1/').get('/events/' + eventId + '/bookings').end((err, res) => {
-                chai.expect(res).to.have.status(200);
-                chai.expect(res).to.be.json;
-                chai.expect(res.body).to.be.an('array');
-                chai.expect(res.body.length).to.eql(1);
-                done();
-            })
-        })
-    });
-});
-
-
-describe("endpoint #6 test", ()=> {
-    it('Get Specific Booking', (done) => {
-        chai.request('http://localhost:3000/api/v1/events/' + eventId ).get('/bookings/' + bookingId).end((err, res) => {
-            chai.expect(res).to.have.status(200);
-            chai.expect(res).to.be.json;
-            chai.expect(Object.keys(res.body).length).to.eql(6);
-            chai.expect(res.body).to.be.a('object');
-            chai.expect(res.body).to.have.property('_id').eql(bookingId.toString());
-            chai.expect(res.body).to.have.property('firstName');
-            chai.expect(res.body).to.have.property('lastName');
-            chai.expect(res.body).to.have.property('spots').egl(res.capacity);
-            chai.expect(res.body).to.have.property('email');
-            chai.expect(res.body).to.have.property('tel');
-            done();
+    describe("GET & POST endpoint tests", () => {
+        describe("endpoint #5 test", ()=> {
+            it('Get All Bookings', (done) => {
+                chai.request('http://localhost:3000/api/v1/').get('/events/:eventId/bookings').end((err, res) => {
+                    chai.expect(res).to.have.status(200);
+                    chai.expect(res).to.be.json;
+                    chai.expect(res.body).to.be.an('array');
+                    chai.expect(res.body.length).to.eql(1);
+                    done();
             })
         })
     });
@@ -177,5 +157,19 @@ describe("endpoint #6 test", ()=> {
                 })
             })
         });
+
+    describe("endpoint #8 test", ()=> {
+        it("Delete a specific booking", function(done){
+            chai.request('http://localhost:3000/api/v1').delete('/events/' + eventId + "/bookings/" + bookingId).auth("notadmin", "notsecret").end((err, res) => {
+            chai.expect(res).to.have.status(401);
+            done();
+                
+        })
+
+
+
+    })
+
+});
 
 });
